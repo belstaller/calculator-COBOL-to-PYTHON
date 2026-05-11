@@ -7,11 +7,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "python -m unittest",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "python:run": "python src/interfaces/cli/main.py"
+    "python:run": "python -m src.interfaces.cli.main"
   },
   "dependencies": {
     "next": "14.2.10",

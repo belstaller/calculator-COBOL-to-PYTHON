@@ -18,7 +18,11 @@ Production-ready boilerplate that combines a Next.js interface with Python CLI s
    ```bash
    npm run dev
    ```
-4. Run the Python CLI example:
+4. Run the Python CLI calculator:
+   ```bash
+   python -m src.interfaces.cli.main
+   ```
+   Or use the npm convenience script:
    ```bash
    npm run python:run
    ```
@@ -31,6 +35,7 @@ Production-ready boilerplate that combines a Next.js interface with Python CLI s
 - `npm run typecheck` — run TypeScript checks
 - `npm run format` — format files with Prettier
 - `npm run python:run` — run the Python CLI entry point
+- `python -m src.interfaces.cli.main` — run the calculator natively with Python
 
 ## Clean Architecture layers
 - `src/domain/` — entities, value objects, domain services, repository interfaces

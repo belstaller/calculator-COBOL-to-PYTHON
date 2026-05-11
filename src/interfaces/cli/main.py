@@ -1,14 +1,29 @@
-"""CLI adapter entry point for the calculator session service."""
+#!/usr/bin/env python3
+"""Python CLI entry point for the calculator application."""
 
-import os
-import sys
+from __future__ import annotations
 
-# Add project root to path when executed directly
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+from src.application.services import CalculatorSessionService
+from src.interfaces.cli.console_handlers import ConsoleCalculatorInteraction
 
-from src.application.services import CalculatorSessionService  # noqa: E402
-from src.interfaces.cli.console_handlers import ConsoleCalculatorInteraction  # noqa: E402
+
+def create_calculator_application() -> CalculatorSessionService:
+    """Compose the calculator CLI runtime dependencies."""
+    interaction = ConsoleCalculatorInteraction()
+    return CalculatorSessionService(interaction)
+
+
+def main() -> int:
+    """Run the calculator application and translate normal interrupts into clean exits."""
+    application = create_calculator_application()
+
+    try:
+        application.run()
+    except KeyboardInterrupt:
+        return 0
+
+    return 0
 
 
 if __name__ == '__main__':
-    CalculatorSessionService(ConsoleCalculatorInteraction()).run()
+    raise SystemExit(main())

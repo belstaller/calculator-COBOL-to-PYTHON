@@ -2,13 +2,9 @@
 
 from __future__ import annotations
 
-import os
 import sys
 from dataclasses import dataclass
 from typing import Callable, Optional, TextIO
-
-# Add project root to path when executed directly
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
 from src.application.services import CalculationRequest, CalculationResponse
 
