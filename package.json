@@ -1,0 +1,30 @@
+{
+  "name": "calculator-migration-full-workflow-test",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Production-ready boilerplate combining Next.js and Python utilities using Clean Architecture.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "python:run": "python src/interfaces/cli/main.py"
+  },
+  "dependencies": {
+    "next": "14.2.10",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.4",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.10",
+    "prettier": "3.3.3",
+    "typescript": "5.6.2"
+  }
+}
