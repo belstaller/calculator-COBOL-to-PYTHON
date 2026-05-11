@@ -1,40 +1,42 @@
-"""Tests for the Python CLI entry point wiring."""
+"""Integration-style tests for the Python calculator CLI flow."""
 
+import io
 import unittest
 from unittest.mock import patch
 
-from src.application.services import CalculatorSessionService
-from src.interfaces.cli.console_handlers import ConsoleCalculatorInteraction
-from src.interfaces.cli.main import create_calculator_application, main
+from src.interfaces.cli.main import main
 
 
 class TestCliMain(unittest.TestCase):
-    """Verify CLI runtime composition and exit behavior."""
+    """Verify CLI behavior through mocked console input and output."""
 
-    def test_create_calculator_application_composes_console_interaction_and_service(self):
-        application = create_calculator_application()
+    def test_main_runs_successful_calculation_cycle_then_exits_after_result_display(self):
+        output = io.StringIO()
+        inputs = iter(['10', '+', '5', '\x1b'])
 
-        self.assertIsInstance(application, CalculatorSessionService)
-        self.assertIsInstance(application._interaction, ConsoleCalculatorInteraction)
+        def fake_input(prompt: str) -> str:
+            return next(inputs)
 
-    def test_main_runs_application(self):
-        with patch('src.interfaces.cli.main.create_calculator_application') as create_application:
-            application = create_application.return_value
+        with patch('src.interfaces.cli.console_handlers.sys.stdout', output):
+            with patch('builtins.input', side_effect=fake_input):
+                exit_code = main()
 
-            exit_code = main()
+        rendered = output.getvalue()
+        self.assertEqual(exit_code, 0)
+        self.assertIn('=== Calculator ===', rendered)
+        self.assertIn('10.0 + 5.0 = 15.0', rendered)
 
-            application.run.assert_called_once_with()
-            self.assertEqual(exit_code, 0)
+    def test_main_exits_cleanly_when_user_interrupts_during_input(self):
+        output = io.StringIO()
 
-    def test_main_handles_keyboard_interrupt_as_clean_exit(self):
-        with patch('src.interfaces.cli.main.create_calculator_application') as create_application:
-            application = create_application.return_value
-            application.run.side_effect = KeyboardInterrupt
+        with patch('src.interfaces.cli.console_handlers.sys.stdout', output):
+            with patch('builtins.input', side_effect=KeyboardInterrupt):
+                exit_code = main()
 
-            exit_code = main()
-
-            application.run.assert_called_once_with()
-            self.assertEqual(exit_code, 0)
+        rendered = output.getvalue()
+        self.assertEqual(exit_code, 0)
+        self.assertIn('=== Calculator ===', rendered)
+        self.assertNotIn(' = ', rendered)
 
 
 if __name__ == '__main__':

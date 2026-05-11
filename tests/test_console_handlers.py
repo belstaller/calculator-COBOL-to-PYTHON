@@ -1,17 +1,13 @@
 """Tests for console calculator interface handlers."""
 
 import io
-import os
-import sys
 import unittest
-
-# Add src directory to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.application.services import CalculationResponse
 from src.interfaces.cli.console_handlers import (
     DIVISION_BY_ZERO_FEEDBACK,
     ESCAPE,
+    GENERIC_VALIDATION_FEEDBACK,
     INVALID_OPERATOR_FEEDBACK,
     ConsoleCalculatorInteraction,
 )
@@ -68,6 +64,14 @@ class TestConsoleCalculatorInteraction(unittest.TestCase):
         interaction.display_validation_error('Division by zero is not allowed.')
 
         self.assertIn(DIVISION_BY_ZERO_FEEDBACK, output.getvalue())
+
+    def test_display_validation_error_formats_generic_feedback(self):
+        output = io.StringIO()
+        interaction = ConsoleCalculatorInteraction(input_func=lambda prompt: '', output=output)
+
+        interaction.display_validation_error('Unexpected issue.')
+
+        self.assertIn(f'{GENERIC_VALIDATION_FEEDBACK} Unexpected issue.', output.getvalue())
 
     def test_display_result_shows_completed_expression_and_result(self):
         output = io.StringIO()
